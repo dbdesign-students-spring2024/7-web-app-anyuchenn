@@ -1,18 +1,14 @@
-{% extends 'base.html' %} {% block container %}
-<h2>Update</h2>
-<p>Edit a record in the MongoDB database collection.</p>
-<form method="POST" action="{{ url_for('edit_post', mongoid=mongoid) }}">
-  <p>
-    Your name:
-    <input type="text" id="fname" name="fname" value="{{doc.name}}" /><br />
-  </p>
-  <p>
-    Message:
-    <textarea id="fmessage" name="fmessage">{{doc.message}}</textarea>
-  </p>
-  <p>
-    <a href="{{ url_for('read')}}">Cancel</a>
-    <input type="submit" name="post-btn" value="Save" />
-  </p>
+{% extends 'base.html' %}
+
+{% block container %}
+<h2>Edit Rent Information</h2>
+<p>Edit your rent information below:</p>
+<form method="POST" action="{{ url_for('edit', mongoid=mongoid) }}">
+  <p>Address: <input type="text" id="address" name="address" value="{{ doc.address }}" required /><br /></p>
+  <p>Rent Price: <input type="number" id="price" name="price" value="{{ doc.price }}" required /><br /></p>
+  <p>Square Feet: <input type="number" id="squareFeet" name="squareFeet" value="{{ doc.squareFeet }}" required /><br /></p>
+  <p>Roommate Information: <textarea id="roommate" name="roommate">{{ doc.roommate }}</textarea><br /></p>
+  <p><a href="{{ url_for('read')}}">Cancel</a>
+  <input type="submit" name="post-btn" value="Save Changes" /></p>
 </form>
 {% endblock %}

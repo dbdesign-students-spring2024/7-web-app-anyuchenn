@@ -1,70 +1,21 @@
-#!/usr/bin/env python3
-
-import os
-import sys
-import subprocess
-import datetime
-
-from flask import Flask, render_template, request, redirect, url_for, make_response
-
-# import logging
-import sentry_sdk
-from sentry_sdk.integrations.flask import (
-    FlaskIntegration,
-)  # delete this if not using sentry.io
-
-# from markupsafe import escape
-import pymongo
-from pymongo.errors import ConnectionFailure
+from flask import Flask, render_template, request, redirect, url_for
+from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
-from dotenv import load_dotenv
+from datetime import datetime
 
-# load credentials and configuration options from .env file
-# if you do not yet have a file named .env, make one based on the template in env.example
-load_dotenv(override=True)  # take environment variables from .env.
-
-# initialize Sentry for help debugging... this requires an account on sentrio.io
-# you will need to set the SENTRY_DSN environment variable to the value provided by Sentry
-# delete this if not using sentry.io
-sentry_sdk.init(
-    dsn=os.getenv("SENTRY_DSN"),
-    # enable_tracing=True,
-    # Set traces_sample_rate to 1.0 to capture 100% of transactions for performance monitoring.
-    traces_sample_rate=1.0,
-    # Set profiles_sample_rate to 1.0 to profile 100% of sampled transactions.
-    # We recommend adjusting this value in production.
-    profiles_sample_rate=1.0,
-    integrations=[FlaskIntegration()],
-    send_default_pii=True,
-)
-
-# instantiate the app using sentry for debugging
 app = Flask(__name__)
 
-# # turn on debugging if in development mode
-# app.debug = True if os.getenv("FLASK_ENV", "development") == "development" else False
+# MongoDB Atlas connection
+app.config["MONGO_URI"] = "mongodb+srv://anyuchen:1878887400Cay.@cluster0.6xunfrl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+mongo = PyMongo(app)
 
-# try to connect to the database, and quit if it doesn't work
-try:
-    cxn = pymongo.MongoClient(os.getenv("MONGO_URI"))
-    db = cxn[os.getenv("MONGO_DBNAME")]  # store a reference to the selected database
-
-    # verify the connection works by pinging the database
-    cxn.admin.command("ping")  # The ping command is cheap and does not require auth.
-    print(" * Connected to MongoDB!")  # if we get here, the connection worked!
-except ConnectionFailure as e:
-    # catch any database errors
-    # the ping command failed, so the connection is not available.
-    print(" * MongoDB connection error:", e)  # debug
-    sentry_sdk.capture_exception(e)  # send the error to sentry.io. delete if not using
-    sys.exit(1)  # this is a catastrophic error, so no reason to continue to live
-
-
+# Select the database
+db = mongo.db
 # set up the routes
 
 
-@app.route("/")
-def home():
+@app.route("/index")
+def index():
     """
     Route for the home page.
     Simply returns to the browser the content of the index.html file located in the templates folder.
@@ -201,3 +152,4 @@ def handle_error(e):
 if __name__ == "__main__":
     # logging.basicConfig(filename="./flask_error.log", level=logging.DEBUG)
     app.run(load_dotenv=True)
+

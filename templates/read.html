@@ -1,23 +1,39 @@
 {% extends 'base.html' %}
 
 {% block container %}
-<h2>Read</h2>
-<p>This page shows information pulled from a MongoDB database collection.
+<h2>Publish Rent Information</h2>
+<p>Enter your rent information below:</p>
+<form method="POST" action="{{ url_for('create') }}">
+  <p>Address: <input type="text" id="address" name="address" required /><br /></p>
+  <p>Rent Price: <input type="number" id="price" name="price" required /><br /></p>
+  <p>Square Feet: <input type="number" id="squareFeet" name="squareFeet" required /><br /></p>
+  <p>Roommate Information: <textarea id="roommate" name="roommate"></textarea><br /></p>
+  <p><input type="submit" name="post-btn" value="Publish" /></p>
+</form>
+
+<hr class="solid">
+
+<h2>Published Rent Information</h2>
+<p>Here are the rent information published by users:</p>
         
-    {% for doc in docs %}
-    <div>
-        <hr class="solid">
-        <p class="post">
-            Posted by {{doc.name}} at {{ doc.created_at.strftime("%H:%M on %d %B %Y") }}
-            <br/>
-            <a href="{{ url_for('edit',mongoid=doc._id)}}">Edit</a> | <a href="{{ url_for('delete',mongoid=doc._id)}}">Delete</a>
-            <br/>
-        </p>
-        <p>
-            {{ doc.message }}
-        </p>
-            
-    </div>
-    {%endfor%}
+{% for rent_info in rent_infos %}
+<div>
+    <hr class="solid">
+    <p class="post">
+       Address: {{ rent_info.address }}
+        <br>
+        Rent Price: {{ rent_info.price }}
+        <br>
+        Square Feet: {{ rent_info.squareFeet }}
+        <br>
+        Roommate Information: {{ rent_info.roommate }}
+     
+        <br/>  
+      <p>
+          {{ doc.message }}
+      </p>
+          
+  </div>
+  {%endfor%}
 </p>
 {% endblock %}

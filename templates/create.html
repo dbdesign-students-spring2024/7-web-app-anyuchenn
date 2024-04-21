@@ -1,15 +1,14 @@
-{% extends 'base.html' %} {% block container %}
-<h2>Create</h2>
-<p>Create a new record in the MongoDB database collection.</p>
-<form method="POST" action="{{ url_for('create_post') }}">
-  <p>Your name: <input type="text" id="fname" name="fname" /><br /></p>
-  <p>
-    Message:
-    <textarea type="text" id="fmessage" name="fmessage"></textarea>
-  </p>
-  <p>
-    <a href="{{ url_for('read')}}">Cancel</a>
-    <input type="submit" name="post-btn" value="Post" />
-  </p>
+{% extends 'base.html' %}
+
+{% block container %}
+<h2>Publish Your Rent Information</h2>
+<p>Enter your rent information below:</p>
+<form method="POST" action="{{ url_for('create') }}">
+  <p>Address: <input type="text" id="address" name="address" required /><br /></p>
+  <p>Rent Price: <input type="number" id="price" name="price" required /><br /></p>
+  <p>Square Feet: <input type="number" id="squareFeet" name="squareFeet" required /><br /></p>
+  <p>Roommate Information: <textarea id="roommate" name="roommate"></textarea><br /></p>
+  <p><a href="{{ url_for('create')}}">Cancel</a>
+  <input type="submit" name="post-btn" value="Publish" /></p>
 </form>
 {% endblock %}
